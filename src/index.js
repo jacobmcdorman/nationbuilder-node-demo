@@ -5,6 +5,7 @@ NationBuilder.DEFAULT_PROTOCOL = 'https';
 NationBuilder.DEFAULT_HOST_TMPL = '{slug}.nationbuilder.com';
 NationBuilder.DEFAULT_PORT = '443';
 NationBuilder.DEFAULT_BASE_PATH = '/api/v1/';
+NationBuilder.DEFAULT_TIMEOUT_MS = 120000;
 
 Object.assign(NationBuilder, authenticators);
 
@@ -19,13 +20,17 @@ export function NationBuilder (slug, auth) {
 		host: NationBuilder.DEFAULT_HOST_TMPL.replace(/^{slug}/, slug),
 		port: NationBuilder.DEFAULT_PORT,
 		basePath: NationBuilder.DEFAULT_BASE_PATH,
+		timeout_ms: NationBuilder.DEFAULT_TIMEOUT_MS,
 	};
 
-	for (let name in resources) {
-		this[name[0].toLowerCase() + name.substring(1)] = new resources[name](this);
+	let resourceAuth = auth;
+	if (typeof auth === 'string') {
+		resourceAuth = new NationBuilder.BasicAuth(auth);
 	}
 
-	this._auth = auth;
+	for (let name in resources) {
+		this[name[0].toLowerCase() + name.substring(1)] = new resources[name](this, resourceAuth);
+	}
 }
 
 NationBuilder.prototype = {
