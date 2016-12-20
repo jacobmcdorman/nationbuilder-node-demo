@@ -28,17 +28,6 @@ export default Resource.extend({
 
 	find: GETMethod({path: 'people/match'}),
 
-	nearby: GETMethod({
-		path: 'people/nearby',
-		response: function (res) {
-			return {
-				people: res['results'],
-				next: pager(res['next'], this.nearby.bind(this)),
-				prev: pager(res['prev'], this.nearby.bind(this)),
-			};
-		},
-	}),
-
 	update: PUTMethod({
 		path: 'people/{id}',
 		urlParams: ['id'],
