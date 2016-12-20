@@ -19,7 +19,7 @@ const auth = NationBuilder.BasicAuth('my-test-token');
 const nb = new NationBuilder('my-slug', auth);
 ```
 
-After the NationBuilder SDK is instantiated. The resources methods can be accessed
+After the NationBuilder SDK is instantiated, the resources methods can be accessed
 via the pattern nb.[resource].[resource-method].
 
 ```javascript
@@ -27,7 +27,7 @@ nb.people.list({limit: 5})
     .then(list => {
         // first page of people: 5 per
         console.log("people:", list.people);
-        return list.next;
+        return list.next();
     })
     .then(list => {
         // second page of people...
